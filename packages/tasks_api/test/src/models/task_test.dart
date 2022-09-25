@@ -6,7 +6,7 @@ void main() {
     Task newTask({
       String? id = 'randomId',
       String taskName = 'taskName',
-      TaskPriority taskPriority = TaskPriority.normal,
+      taskPriority = 'normal',
       bool isCompleted = true,
     }) {
       return Task(
@@ -26,6 +26,16 @@ void main() {
         expect(() => newTask(id: ''), throwsA(isA<AssertionError>()));
       });
 
+      test(
+          'throws AssertionError when the taskPriority is not equal to either low, normal or high',
+          () {
+        expect(
+            () => newTask(
+                  taskPriority: 'highest',
+                ),
+            throwsA(isA<AssertionError>()));
+      });
+
       test('sets the id if not provided', () {
         expect(newTask(id: null).id, isNotEmpty);
       });
@@ -40,7 +50,7 @@ void main() {
             equals([
               'randomId',
               'taskName',
-              TaskPriority.normal,
+              'normal',
               true,
             ]));
       });
@@ -68,12 +78,12 @@ void main() {
             newTask().copyWith(
                 id: '2lKioO',
                 taskName: 'amazing task',
-                taskPriority: TaskPriority.high,
+                taskPriority: 'high',
                 isCompleted: false),
             equals(newTask(
                 id: '2lKioO',
                 taskName: 'amazing task',
-                taskPriority: TaskPriority.high,
+                taskPriority: 'high',
                 isCompleted: false)));
       });
     });

@@ -19,7 +19,7 @@ class TaskAdapter extends TypeAdapter<Task> {
     return Task(
       id: fields[0] as String,
       taskName: fields[1] as String,
-      taskPriority: fields[2] as TaskPriority,
+      taskPriority: fields[2] as String,
       isCompleted: fields[3] as bool,
     );
   }

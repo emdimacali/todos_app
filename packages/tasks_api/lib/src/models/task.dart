@@ -1,19 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:tasks_api/tasks_api.dart';
 import 'package:uuid/uuid.dart';
 
-/// This is how urgent a task is.
-///
-/// - *high* is most urgent
-///
-/// - *normal* is urgent
-///
-/// - *low* is least urgent
-
-enum TaskPriority {
-  high,
-  normal,
-  low,
-}
+part 'task.g.dart';
 
 /// A single task item.
 ///
@@ -23,10 +14,12 @@ enum TaskPriority {
 /// If an [id] is provided, it must not be empty. If no [id] is
 /// passed, it will be generated.
 ///
+@immutable
+@JsonSerializable()
 class Task extends Equatable {
   final String id;
   final String taskName;
-  final TaskPriority taskPriority;
+  final String taskPriority;
   final bool isCompleted;
 
   Task({
@@ -36,14 +29,19 @@ class Task extends Equatable {
     this.isCompleted = false,
   })  : assert(
           id == null || id.isNotEmpty,
-          'id cannot be null and must not be empty',
+          'id must not be empty',
         ),
+        assert(
+            taskPriority == TaskPriority.low ||
+                taskPriority == TaskPriority.normal ||
+                taskPriority == TaskPriority.high,
+            'task priority values can only be one of the following: {low, normal, high}'),
         id = id ?? const Uuid().v1(); // Time based id
 
   Task copyWith({
     String? id,
     String? taskName,
-    TaskPriority? taskPriority,
+    String? taskPriority,
     bool? isCompleted,
   }) {
     return Task(
@@ -53,6 +51,12 @@ class Task extends Equatable {
       isCompleted: isCompleted ?? this.isCompleted,
     );
   }
+
+  /// Converts the given [Map<String, dynamic>] into a [Task].
+  static Task fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+
+  /// Converts this [Task] into a [Map<String, dynamic>].
+  Map<String, dynamic> toJson() => _$TaskToJson(this);
 
   @override
   List<Object> get props => [id, taskName, taskPriority, isCompleted];

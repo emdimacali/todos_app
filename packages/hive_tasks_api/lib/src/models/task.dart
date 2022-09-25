@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:tasks_api/tasks_api.dart';
+import 'package:tasks_api/tasks_api.dart' as tasksApi;
 
 part 'task.g.dart';
 
@@ -13,7 +13,7 @@ class Task extends HiveObject {
   final String taskName;
 
   @HiveField(2)
-  final TaskPriority taskPriority;
+  final String taskPriority;
 
   @HiveField(3)
   final bool isCompleted;
@@ -24,4 +24,19 @@ class Task extends HiveObject {
     required this.taskPriority,
     required this.isCompleted,
   });
+
+  Task.fromTaskModel(tasksApi.Task task)
+      : id = task.id,
+        taskName = task.taskName,
+        taskPriority = task.taskPriority,
+        isCompleted = task.isCompleted;
+
+  tasksApi.Task toTaskModel() {
+    return tasksApi.Task(
+      id: id,
+      taskName: taskName,
+      taskPriority: taskPriority,
+      isCompleted: isCompleted,
+    );
+  }
 }
