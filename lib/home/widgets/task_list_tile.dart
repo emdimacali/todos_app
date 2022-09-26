@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 import 'package:todos_app/home/home.dart';
+import 'package:todos_app/home/widgets/edit_task_dialog.dart';
 
 class TaskListTile extends StatelessWidget {
   final Task task;
@@ -32,7 +33,14 @@ class TaskListTile extends StatelessWidget {
         secondary: IconButton(
           icon: const Icon(Icons.more_horiz),
           onPressed: () {
-            print('MORE BUTTON WAS PRESSED');
+            showDialog(
+                context: context,
+                builder: (_) {
+                  return BlocProvider.value(
+                    value: context.read<TaskBloc>()..add(TaskViewed(task)),
+                    child: const EditTaskDialog(),
+                  );
+                });
           },
         ),
         onChanged: (isTicked) {

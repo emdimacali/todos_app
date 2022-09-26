@@ -13,6 +13,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskSubscriptionRequested>(_onSubscriptionRequested);
     on<TaskAdded>(_onTaskAdded);
     on<TaskTicked>(_onTaskTicked);
+    on<TaskViewed>(_onTaskViewed);
+    on<TaskUpdated>(_onTaskUpdated);
   }
 
   final TasksRepository _tasksRepository;
@@ -102,6 +104,36 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       Task updatedTask =
           event.task.copyWith(isCompleted: !event.task.isCompleted);
 
+      await _tasksRepository.saveTask(updatedTask);
+      emit(state.copyWith(status: TaskStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: TaskStatus.failure));
+    }
+  }
+
+  Future<void> _onTaskViewed(
+    TaskViewed event,
+    Emitter<TaskState> emit,
+  ) async {
+    emit(state.copyWith(status: TaskStatus.loading));
+
+    try {
+      emit(state.copyWith(
+          status: TaskStatus.success, taskBeingEdited: event.task));
+    } catch (e) {
+      emit(state.copyWith(status: TaskStatus.failure));
+    }
+  }
+
+  Future<void> _onTaskUpdated(
+    TaskUpdated event,
+    Emitter<TaskState> emit,
+  ) async {
+    emit(state.copyWith(status: TaskStatus.loading));
+
+    try {
+      Task updatedTask = state.taskBeingEdited!
+          .copyWith(taskName: event.taskName, taskPriority: event.taskPriority);
       await _tasksRepository.saveTask(updatedTask);
       emit(state.copyWith(status: TaskStatus.success));
     } catch (e) {

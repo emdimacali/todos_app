@@ -23,3 +23,16 @@ class TaskTicked extends TaskEvent {
 
   final Task task;
 }
+
+class TaskViewed extends TaskEvent {
+  const TaskViewed(this.task);
+
+  final Task task;
+}
+
+class TaskUpdated extends TaskEvent {
+  const TaskUpdated({this.taskName, this.taskPriority});
+
+  final String? taskName;
+  final String? taskPriority;
+}
