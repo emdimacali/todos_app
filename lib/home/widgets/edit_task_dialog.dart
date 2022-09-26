@@ -89,8 +89,9 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        // context.read<TaskBloc>().add(
-                        //     TaskAdded(taskNameController.text, taskPriority!));
+                        final id =
+                            context.read<TaskBloc>().state.taskBeingEdited!.id;
+                        context.read<TaskBloc>().add(TaskDeleted(id));
                       },
                       child: const Text('Delete')),
                   const SizedBox(

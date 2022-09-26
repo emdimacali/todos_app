@@ -9,7 +9,11 @@ abstract class TaskEvent extends Equatable {
 
 class TaskSubscriptionRequested extends TaskEvent {}
 
-class TaskDeleted extends TaskEvent {}
+class TaskDeleted extends TaskEvent {
+  const TaskDeleted(this.id);
+
+  final String id;
+}
 
 class TaskAdded extends TaskEvent {
   const TaskAdded(this.taskName, this.taskPriority);

@@ -15,6 +15,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskTicked>(_onTaskTicked);
     on<TaskViewed>(_onTaskViewed);
     on<TaskUpdated>(_onTaskUpdated);
+    on<TaskDeleted>(_onTaskDeleted);
   }
 
   final TasksRepository _tasksRepository;
@@ -135,6 +136,20 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       Task updatedTask = state.taskBeingEdited!
           .copyWith(taskName: event.taskName, taskPriority: event.taskPriority);
       await _tasksRepository.saveTask(updatedTask);
+      emit(state.copyWith(status: TaskStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: TaskStatus.failure));
+    }
+  }
+
+  Future<void> _onTaskDeleted(
+    TaskDeleted event,
+    Emitter<TaskState> emit,
+  ) async {
+    emit(state.copyWith(status: TaskStatus.loading));
+
+    try {
+      await _tasksRepository.deleteTask(event.id);
       emit(state.copyWith(status: TaskStatus.success));
     } catch (e) {
       emit(state.copyWith(status: TaskStatus.failure));
