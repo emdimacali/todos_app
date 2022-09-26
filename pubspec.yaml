@@ -10,11 +10,17 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
+  hive_tasks_api:
+    path: packages/hive_tasks_api
   tasks_api:
     path: packages/tasks_api
+  tasks_repository:
+    path: packages/tasks_repository
+
 dev_dependencies:
   flutter_lints: ^1.0.0
   flutter_test:

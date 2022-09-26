@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive_tasks_api/hive_tasks_api.dart';
+import 'package:todos_app/app/app.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Todos App',
-      // initialRoute: '/',
-      // routes: {
-      //   '/': (context) => const TaskListScreen(),
-      // },
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-    );
-  }
+  runApp(const App());
 }
